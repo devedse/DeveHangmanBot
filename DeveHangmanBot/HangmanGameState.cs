@@ -25,16 +25,19 @@ namespace DeveHangmanBot
         {
             msg = msg.ToLowerInvariant().Trim();
 
+            var result = false;
+
             if (msg.Length == 1)
             {
                 GuessedLetters.Add(msg[0]);
+                result = await PrintHang(bot);
             }
             else if (msg.Equals(Word))
             {
                 GuessedLetters.AddRange(msg);
+                result = await PrintHang(bot);
             }
 
-            var result = await PrintHang(bot);
 
             return result;
         }
