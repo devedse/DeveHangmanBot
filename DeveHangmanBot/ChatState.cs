@@ -14,10 +14,12 @@ namespace DeveHangmanBot
         public bool BotActive { get; set; } = true;
         public long ChatId { get; }
 
-        public Dictionary<string, int> Points = new Dictionary<string, int>();
+        public Dictionary<long, int> Points = new Dictionary<long, int>();
+        private readonly GlobalBotState _globalBotState;
 
-        public ChatState(long chatId)
+        public ChatState(GlobalBotState globalBotState, long chatId)
         {
+            _globalBotState = globalBotState;
             ChatId = chatId;
         }
 
@@ -39,11 +41,16 @@ namespace DeveHangmanBot
             }
             else
             {
-                if (msg == "/stop")
+                if (msg.Equals("/stop"))
                 {
                     BotActive = false;
                     CurrentGame = null;
                     await bot.SendTextMessageAsync(ChatId, "Bot is now inactive");
+                }
+                else if (msg.Equals("/stopgame"))
+                {
+                    await bot.SendTextMessageAsync(ChatId, "Stopping game");
+                    CurrentGame = null;
                 }
                 else if (msg.StartsWith("/play"))
                 {
@@ -76,7 +83,7 @@ namespace DeveHangmanBot
                     var pointThings = Points.OrderByDescending(t => t.Value);
                     foreach (var point in pointThings)
                     {
-                        sb.AppendLine($"{point.Key}: {point.Value}");
+                        sb.AppendLine($"{GetName(point.Key)}: {point.Value}");
                     }
 
                     await bot.SendTextMessageAsync(ChatId, sb.ToString());
@@ -87,30 +94,35 @@ namespace DeveHangmanBot
 
                     if (correct)
                     {
-                        await bot.SendTextMessageAsync(ChatId, $"You fucking did it {message.From.Username}, 10 points to gryffindor");
-                        AddPoints(message.From.Username, 10);
+                        await bot.SendTextMessageAsync(ChatId, $"You fucking did it {GetName(message.From.Id)}, 10 points to gryffindor");
+                        AddPoints(message.From.Id, 10);
+
+                        CurrentGame = null;
                     }
                 }
             }
         }
 
-        private void AddPoints(string user, int points)
+        private void AddPoints(long userId, int points)
         {
-            if (Points.ContainsKey(user))
+            if (Points.ContainsKey(userId))
             {
-                Points[user] += points;
+                Points[userId] += points;
             }
             else
             {
-                Points.Add(user, points);
+                Points.Add(userId, points);
             }
         }
 
         public async Task DisplayHelp(TelegramBotClient bot)
         {
             var sb = new StringBuilder();
+            sb.AppendLine("Type a letter to guess");
+            sb.AppendLine("Type a word to guess the whole word, the bot will respond if you are right!");
             sb.AppendLine("Type /words to see available word lists");
-            sb.AppendLine("Type /play 1 2 3 to start a game in the bot");
+            sb.AppendLine("Type /play 1 2 3 to start a game with a word list in the bot");
+            sb.AppendLine("Type /stopgame to stop the current game");
 
             await bot.SendTextMessageAsync(ChatId, sb.ToString());
         }
@@ -127,6 +139,24 @@ namespace DeveHangmanBot
             }
 
             await bot.SendTextMessageAsync(ChatId, sb.ToString());
+        }
+
+        public string GetName(long id)
+        {
+            var user = _globalBotState.AllUsers[id];
+            if (!string.IsNullOrWhiteSpace(user.FirstName) && !string.IsNullOrWhiteSpace(user.LastName))
+            {
+                return $"{user.FirstName} {user.LastName}";
+            }
+            else if (!string.IsNullOrWhiteSpace(user.FirstName))
+            {
+                return user.FirstName;
+            }
+            else if (!string.IsNullOrWhiteSpace(user.Username))
+            {
+                return user.Username;
+            }
+            return user.Id.ToString();
         }
     }
 }

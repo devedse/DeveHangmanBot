@@ -13,7 +13,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="WordLists\LeagueChampions.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="WordLists\Pokemon1-151.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="WordLists\RetardedWords.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

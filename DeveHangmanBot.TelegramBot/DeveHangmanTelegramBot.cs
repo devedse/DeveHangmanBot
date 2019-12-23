@@ -23,6 +23,8 @@ namespace DeveHangmanBot.TelegramBot
 
         private Dictionary<long, ChatState> _chatStates = new Dictionary<long, ChatState>();
 
+        private GlobalBotState _globalBotState = new GlobalBotState();
+
 
         public DeveHangmanTelegramBot(BotConfig botConfig, params ILogger[] extraLoggers)
         {
@@ -133,11 +135,11 @@ namespace DeveHangmanBot.TelegramBot
             _chatStates.TryGetValue(currentChatId, out curChat);
             if (curChat == null)
             {
-                curChat = new ChatState(currentChatId);
+                curChat = new ChatState(_globalBotState, currentChatId);
                 _chatStates.Add(currentChatId, curChat);
             }
 
-
+            _globalBotState.AllUsers[message.From.Id] = message.From;
 
 
             if (txt.Equals("/help", StringComparison.OrdinalIgnoreCase))
