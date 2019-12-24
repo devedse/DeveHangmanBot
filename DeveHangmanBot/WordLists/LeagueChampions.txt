@@ -7,7 +7,7 @@ Anivia
 Annie
 Aphelios
 Ashe
-Aurelion Sol
+AurelionSol
 Azir
 Bard
 Blitzcrank
@@ -16,11 +16,11 @@ Braum
 Caitlyn
 Camille
 Cassiopeia
-Cho'Gath
+ChoGath
 Corki
 Darius
 Diana
-Dr. Mundo
+Dr.Mundo
 Draven
 Ekko
 Elise
@@ -41,12 +41,12 @@ Illaoi
 Irelia
 Ivern
 Janna
-Jarvan IV
+JarvanIV
 Jax
 Jayce
 Jhin
 Jinx
-Kai'Sa
+KaiSa
 Kalista
 Karma
 Karthus
@@ -55,12 +55,12 @@ Katarina
 Kayle
 Kayn
 Kennen
-Kha'Zix
+KhaZix
 Kindred
 Kled
-Kog'Maw
+KogMaw
 LeBlanc
-Lee Sin
+LeeSin
 Leona
 Lissandra
 Lucian
@@ -69,8 +69,8 @@ Lux
 Malphite
 Malzahar
 Maokai
-Master Yi
-Miss Fortune
+MasterYi
+MissFortune
 Mordekaiser
 Morgana
 Nami
@@ -79,7 +79,7 @@ Nautilus
 Neeko
 Nidalee
 Nocturne
-Nunu & Willump
+Nunu
 Olaf
 Orianna
 Ornn
@@ -90,7 +90,7 @@ Qiyana
 Quinn
 Rakan
 Rammus
-Rek'Sai
+RekSai
 Renekton
 Rengar
 Riven
@@ -110,7 +110,7 @@ Soraka
 Swain
 Sylas
 Syndra
-Tahm Kench
+TahmKench
 Taliyah
 Talon
 Taric
@@ -119,14 +119,14 @@ Thresh
 Tristana
 Trundle
 Tryndamere
-Twisted Fate
+TwistedFate
 Twitch
 Udyr
 Urgot
 Varus
 Vayne
 Veigar
-Vel'Koz
+VelKoz
 Vi
 Viktor
 Vladimir
@@ -135,7 +135,7 @@ Warwick
 Wukong
 Xayah
 Xerath
-Xin Zhao
+XinZhao
 Yasuo
 Yorick
 Yuumi
