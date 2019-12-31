@@ -3,7 +3,6 @@ using DeveHangmanBot.Config;
 using DeveHangmanBot.TelegramBot.TelegramLogging;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -11,7 +10,6 @@ using Telegram.Bot;
 using Telegram.Bot.Args;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InputFiles;
 
 namespace DeveHangmanBot.TelegramBot
 {
@@ -21,9 +19,9 @@ namespace DeveHangmanBot.TelegramBot
         private readonly BotConfig _botConfig;
         private readonly ILogger[] _extraLoggers;
 
-        private Dictionary<long, ChatState> _chatStates = new Dictionary<long, ChatState>();
+        private readonly Dictionary<long, ChatState> _chatStates = new Dictionary<long, ChatState>();
 
-        private GlobalBotState _globalBotState = new GlobalBotState();
+        private readonly GlobalBotState _globalBotState = new GlobalBotState();
 
 
         public DeveHangmanTelegramBot(BotConfig botConfig, params ILogger[] extraLoggers)
@@ -131,8 +129,7 @@ namespace DeveHangmanBot.TelegramBot
 
             var currentChatId = message.Chat.Id;
 
-            ChatState curChat;
-            _chatStates.TryGetValue(currentChatId, out curChat);
+            _chatStates.TryGetValue(currentChatId, out ChatState curChat);
             if (curChat == null)
             {
                 curChat = new ChatState(_globalBotState, currentChatId);

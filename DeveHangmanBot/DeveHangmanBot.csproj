@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Title>DeveHangmanBot</Title>
+    <Authors>Devedse</Authors>
+    <Description>This is a library used in some of Devedse's projects. It contains helpers and other code stuff to build applications.</Description>
+    <PackageProjectUrl>https://github.com/devedse/DeveHangmanBot</PackageProjectUrl>
+    <PackageTags>csharp;hangman;telegram</PackageTags>
+    <DebugType>full</DebugType>
   </PropertyGroup>
 
   <ItemGroup>

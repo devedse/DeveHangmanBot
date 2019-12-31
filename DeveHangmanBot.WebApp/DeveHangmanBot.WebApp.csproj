@@ -1,9 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <Title>DeveHangmanBot-TelegramBot</Title>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <Version>1.0.0.0</Version>
+    <Title>DeveHangmanBot-WebApp</Title>
     <Authors>Devedse</Authors>
     <Description>This is a library used in some of Devedse's projects. It contains helpers and other code stuff to build applications.</Description>
     <PackageProjectUrl>https://github.com/devedse/DeveHangmanBot</PackageProjectUrl>
@@ -12,15 +13,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Telegram.Bot" Version="15.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="TelegramLogging\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\DeveHangmanBot.TelegramBot\DeveHangmanBot.TelegramBot.csproj" />
     <ProjectReference Include="..\DeveHangmanBot\DeveHangmanBot.csproj" />
   </ItemGroup>
+
+
 
 </Project>

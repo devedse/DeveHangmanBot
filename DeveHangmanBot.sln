@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeveHangmanBot", "DeveHangmanBot\DeveHangmanBot.csproj", "{8236CC0F-9441-493D-928B-397A23DCA93F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeveHangmanBot.TelegramBot", "DeveHangmanBot.TelegramBot\DeveHangmanBot.TelegramBot.csproj", "{A41DC251-8101-4B58-8266-8CCC0F90F655}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeveHangmanBot.TelegramBot", "DeveHangmanBot.TelegramBot\DeveHangmanBot.TelegramBot.csproj", "{A41DC251-8101-4B58-8266-8CCC0F90F655}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeveHangmanBot.WebApp", "DeveHangmanBot.WebApp\DeveHangmanBot.WebApp.csproj", "{D0F8DA98-1E9B-4B27-A881-4375807C5A84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeveHangmanBot.Tests", "DeveHangmanBot.Tests\DeveHangmanBot.Tests.csproj", "{96999478-47A1-4184-A16F-5BFB169974A7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{A41DC251-8101-4B58-8266-8CCC0F90F655}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A41DC251-8101-4B58-8266-8CCC0F90F655}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A41DC251-8101-4B58-8266-8CCC0F90F655}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0F8DA98-1E9B-4B27-A881-4375807C5A84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0F8DA98-1E9B-4B27-A881-4375807C5A84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0F8DA98-1E9B-4B27-A881-4375807C5A84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0F8DA98-1E9B-4B27-A881-4375807C5A84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96999478-47A1-4184-A16F-5BFB169974A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96999478-47A1-4184-A16F-5BFB169974A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96999478-47A1-4184-A16F-5BFB169974A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96999478-47A1-4184-A16F-5BFB169974A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
