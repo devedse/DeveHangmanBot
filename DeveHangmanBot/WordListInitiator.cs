@@ -29,6 +29,8 @@ namespace DeveHangmanBot
         {
             var wordlists = new List<WordList>();
             wordlists.Add(Instantiate("Pokemon1-151.txt"));
+            wordlists.Add(Instantiate("Pokemon152-251.txt"));
+            wordlists.Add(Instantiate("Pokemon252-386.txt"));
             wordlists.Add(Instantiate("LeagueChampions.txt"));
             wordlists.Add(Instantiate("RetardedWords.txt"));
             return wordlists;
