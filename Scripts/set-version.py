@@ -11,7 +11,7 @@ for f in files:
 
 version = os.getenv('TRAVIS_BUILD_ID', 0)
 
-print(f'Setting version: {version}')
+print("Setting version: {}".format(version))
 
 def setVersion(filePath):
   with open (filePath, 'r' ) as f:
