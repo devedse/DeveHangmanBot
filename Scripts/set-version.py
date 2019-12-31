@@ -5,6 +5,10 @@ abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
 
+files = [f for f in os.listdir('.') if os.path.isfile(f)]
+for f in files:
+  print(f)
+
 version = os.getenv('TRAVIS_BUILD_ID', 0)
 
 print(f'Setting version: {version}')
