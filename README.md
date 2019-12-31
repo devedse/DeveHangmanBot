@@ -18,9 +18,3 @@ A very simple and easy to use Hangman bot for Telegram
 | SonarQube |
 |:---------:|
 | [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=DeveHangmanBot&metric=alert_status)](https://sonarcloud.io/dashboard?id=DeveHangmanBot) |
-
-## Package
-
-| NuGet |
-|:-----:|
-| [![NuGet](https://img.shields.io/nuget/v/DeveHangmanBot.svg)](https://www.nuget.org/packages/DeveHangmanBot/) |
