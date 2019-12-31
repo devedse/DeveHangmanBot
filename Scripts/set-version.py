@@ -5,10 +5,14 @@ abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 os.chdir(dname)
 
+version = os.getenv('TRAVIS_BUILD_ID', 0)
+
+print(f'Setting version: {version}')
+
 def setVersion(filePath):
   with open (filePath, 'r' ) as f:
     content = f.read()
-    content_new = re.sub('(?<=<Version>).*(?=<\/Version>)', '1.0.0.1', content, flags = re.M)
+    content_new = re.sub('(?<=<Version>).*(?=<\/Version>)', f'1.0.0.{version}', content, flags = re.M)
     print(content_new)
   with open (filePath, 'w') as f:
     f.write(content_new)
