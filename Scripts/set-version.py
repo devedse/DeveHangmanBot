@@ -4,16 +4,20 @@ import os
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
 parentdir = os.path.abspath(os.path.join(dname, os.pardir))
-os.chdir(parentdir)
+#os.chdir(parentdir)
 
-files = [f for f in os.listdir('.') if os.path.isfile(f)]
-for f in files:
-  print(f)
+
 
 buildId = os.getenv('TRAVIS_BUILD_ID', 0)
 version = "1.0.0.{}".format(buildId)
 
 print("Setting version: {}".format(version))
+
+def listFiles(path):
+  print("Listing files in: {}".format(path))
+  files = [f for f in os.listdir(path)]
+  for f in files:
+    print(f)
 
 def setVersion(fileName):
   filePath = os.path.join(parentdir, fileName)
@@ -24,7 +28,10 @@ def setVersion(fileName):
   with open (filePath, 'w') as f:
     f.write(content_new)
 
+listFiles('/home/travis/build/devedse/DeveHangmanBot/DeveHangmanBot')
+listFiles('/home/travis/build/devedse/DeveHangmanBot')
+listFiles('/home/travis/build/devedse')
 
-setVersion('DeveHangmanBot\DeveHangmanBot.csproj')
-setVersion('DeveHangmanBot.TelegramBot\DeveHangmanBot.TelegramBot.csproj')
-setVersion('DeveHangmanBot.WebApp\DeveHangmanBot.WebApp.csproj')
+setVersion('DeveHangmanBot/DeveHangmanBot.csproj')
+setVersion('DeveHangmanBot.TelegramBot/DeveHangmanBot.TelegramBot.csproj')
+setVersion('DeveHangmanBot.WebApp/DeveHangmanBot.WebApp.csproj')
