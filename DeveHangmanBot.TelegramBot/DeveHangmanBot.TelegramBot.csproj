@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Version>1.0.0.0</Version>
     <Title>DeveHangmanBot-TelegramBot</Title>
     <Authors>Devedse</Authors>
     <Description>This is a library used in some of Devedse's projects. It contains helpers and other code stuff to build applications.</Description>

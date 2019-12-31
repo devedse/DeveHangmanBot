@@ -14,6 +14,7 @@ matrix:
       dist: trusty # Ubuntu 14.04
 
 script:
+  - python Scripts\set-version.py
   - docker build -t devedse/devehangmanbot -f DeveHangmanBot.WebApp/Dockerfile .;
   - if [[ $TRAVIS_BRANCH == 'master' ]]; then
       docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
