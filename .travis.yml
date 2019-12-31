@@ -14,7 +14,7 @@ matrix:
       dist: trusty # Ubuntu 14.04
 
 script:
-  - docker build -t devedse/devehangmanbot .;
+  - docker build -t devedse/devehangmanbot -f DeveHangmanBot.WebApp/Dockerfile .;
 
 notifications:
   email: false
