@@ -18,11 +18,9 @@ script:
   - docker build -t "devedse/devehangmanbot:latest" -f DeveHangmanBot.WebApp/Dockerfile .;
   - if [[ $TRAVIS_BRANCH == 'master' ]]; then
       docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-      echo $TRAVIS_BUILD_NUMBER;
-      docker images;
       docker image tag devedse/devehangmanbot:latest "devedse/devehangmanbot:$TRAVIS_BUILD_NUMBER";
-      docker push devedse/devehangmanbot;
       docker images;
+      docker push devedse/devehangmanbot;
     fi
 
 notifications:
