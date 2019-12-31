@@ -8,7 +8,7 @@ parentdir = os.path.abspath(os.path.join(dname, os.pardir))
 
 
 
-buildId = os.getenv('TRAVIS_BUILD_ID', 0)
+buildId = os.getenv('TRAVIS_BUILD_NUMBER', 0)
 version = "1.0.0.{}".format(buildId)
 
 print("Setting version: {}".format(version))
