@@ -142,37 +142,37 @@ namespace DeveHangmanBot.TelegramBot
             _globalBotState.AllUsers[message.From.Id] = message.From;
 
 
+
+
             if (txt.Equals("/help", StringComparison.OrdinalIgnoreCase))
             {
                 await LogAndRespond(currentChatId, $"Hello {message.From.FirstName}{Environment.NewLine}Some usefull data:{Environment.NewLine}BotId: {_botConfig.TelegramBotToken.Split(':').FirstOrDefault()}{Environment.NewLine}ChatId: {message.Chat.Id}{Environment.NewLine}UserId: {message.From.Id}{Environment.NewLine}Version: {Assembly.GetEntryAssembly().GetName().Version}");
             }
-            else if (message.From.Id == 239844924L)
+            else if (message.From.Id == 239844924L && txt.Equals("/update", StringComparison.OrdinalIgnoreCase))
             {
                 //Admin commands only allowed by Devedse
-                if (txt.Equals("/update", StringComparison.OrdinalIgnoreCase))
+                var task = Task.Run(async () =>
                 {
-                    var task = Task.Run(async () =>
+                    for (int i = 5; i > 0; i--)
                     {
-                        for (int i = 5; i > 0; i--)
-                        {
-                            await LogAndRespond(currentChatId, $"Killing app in {i} seconds...");
-                            await Task.Delay(1000);
-                        }
-                        await LogAndRespond(currentChatId, "Killing app now");
+                        await LogAndRespond(currentChatId, $"Killing app in {i} seconds...");
+                        await Task.Delay(1000);
+                    }
+                    await LogAndRespond(currentChatId, "Killing app now");
 
-                        Environment.Exit(0);
-                    });
-                }
-                else if (txt.StartsWith("/broadcast", StringComparison.OrdinalIgnoreCase))
+                    Environment.Exit(0);
+                });
+            }
+            else if (message.From.Id == 239844924L && txt.StartsWith("/broadcast", StringComparison.OrdinalIgnoreCase))
+            {
+                //Admin commands only allowed by Devedse
+                var cmd = "/broadcast ";
+                if (txt.Length > cmd.Length)
                 {
-                    var cmd = "/broadcast ";
-                    if (txt.Length > cmd.Length)
+                    var remainder = txt.Substring(cmd.Length);
+                    foreach (var chatstate in _chatStates)
                     {
-                        var remainder = txt.Substring(cmd.Length);
-                        foreach(var chatstate in _chatStates)
-                        {
-                            await _bot.SendTextMessageAsync(chatstate.Key, remainder);
-                        }
+                        await _bot.SendTextMessageAsync(chatstate.Key, remainder);
                     }
                 }
             }
