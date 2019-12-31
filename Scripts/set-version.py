@@ -3,7 +3,8 @@ import os
 
 abspath = os.path.abspath(__file__)
 dname = os.path.dirname(abspath)
-os.chdir(dname)
+parentdir = os.path.abspath(os.path.join(dname, os.pardir))
+os.chdir(parentdir)
 
 files = [f for f in os.listdir('.') if os.path.isfile(f)]
 for f in files:
@@ -14,7 +15,8 @@ version = "1.0.0.{}".format(buildId)
 
 print("Setting version: {}".format(version))
 
-def setVersion(filePath):
+def setVersion(fileName):
+  filePath = os.path.join(parentdir, fileName)
   with open (filePath, 'r' ) as f:
     content = f.read()
     content_new = re.sub('(?<=<Version>).*(?=<\/Version>)', version, content, flags = re.M)
@@ -23,6 +25,6 @@ def setVersion(filePath):
     f.write(content_new)
 
 
-setVersion('..\DeveHangmanBot\DeveHangmanBot.csproj')
-setVersion('..\DeveHangmanBot.TelegramBot\DeveHangmanBot.TelegramBot.csproj')
-setVersion('..\DeveHangmanBot.WebApp\DeveHangmanBot.WebApp.csproj')
+setVersion('DeveHangmanBot\DeveHangmanBot.csproj')
+setVersion('DeveHangmanBot.TelegramBot\DeveHangmanBot.TelegramBot.csproj')
+setVersion('DeveHangmanBot.WebApp\DeveHangmanBot.WebApp.csproj')
