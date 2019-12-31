@@ -23,11 +23,14 @@ namespace DeveHangmanBot.TelegramBot
 
         private readonly GlobalBotState _globalBotState = new GlobalBotState();
 
+        private readonly ILogger _logger;
 
         public DeveHangmanTelegramBot(BotConfig botConfig, params ILogger[] extraLoggers)
         {
             _botConfig = botConfig;
             _extraLoggers = extraLoggers;
+            _logger = TelegramLoggerFactory.CreateLogger(_extraLoggers);
+
             _bot = new TelegramBotClient(botConfig.TelegramBotToken);
 
             _bot.OnCallbackQuery += BotOnCallbackQueryReceived;
@@ -73,14 +76,12 @@ namespace DeveHangmanBot.TelegramBot
                 return;
             }
 
-            var logger = TelegramLoggerFactory.CreateLogger(_bot, message.Chat.Id, _extraLoggers);
-
             try
             {
                 switch (message.Type)
                 {
                     case MessageType.Text:
-                        await HandleTxt(logger, message);
+                        await HandleTxt(message);
                         return;
                     case MessageType.Photo:
                     case MessageType.Unknown:
@@ -121,7 +122,7 @@ namespace DeveHangmanBot.TelegramBot
 
         }
 
-        private async Task HandleTxt(ILogger logger, Message message)
+        private async Task HandleTxt(Message message)
         {
             var txt = message.Text;
             var chatUser = message.From.FirstName;
@@ -132,8 +133,10 @@ namespace DeveHangmanBot.TelegramBot
             _chatStates.TryGetValue(currentChatId, out ChatState curChat);
             if (curChat == null)
             {
-                curChat = new ChatState(_globalBotState, currentChatId);
+                curChat = new ChatState(_logger, _globalBotState, currentChatId);
                 _chatStates.Add(currentChatId, curChat);
+
+                _logger.Write($"Added new chat group: {currentChatId}");
             }
 
             _globalBotState.AllUsers[message.From.Id] = message.From;
@@ -141,21 +144,37 @@ namespace DeveHangmanBot.TelegramBot
 
             if (txt.Equals("/help", StringComparison.OrdinalIgnoreCase))
             {
-                logger.Write($"Hello {message.From.FirstName}{Environment.NewLine}Some usefull data:{Environment.NewLine}BotId: {_botConfig.TelegramBotToken.Split(':').FirstOrDefault()}{Environment.NewLine}ChatId: {message.Chat.Id}{Environment.NewLine}UserId: {message.From.Id}{Environment.NewLine}Version: {Assembly.GetEntryAssembly().GetName().Version}");
+                await LogAndRespond(currentChatId, $"Hello {message.From.FirstName}{Environment.NewLine}Some usefull data:{Environment.NewLine}BotId: {_botConfig.TelegramBotToken.Split(':').FirstOrDefault()}{Environment.NewLine}ChatId: {message.Chat.Id}{Environment.NewLine}UserId: {message.From.Id}{Environment.NewLine}Version: {Assembly.GetEntryAssembly().GetName().Version}");
             }
-            else if (txt.Equals("/update", StringComparison.OrdinalIgnoreCase) && message.From.Id == 239844924L)
+            else if (message.From.Id == 239844924L)
             {
-                var task = Task.Run(async () =>
+                //Admin commands only allowed by Devedse
+                if (txt.Equals("/update", StringComparison.OrdinalIgnoreCase))
                 {
-                    for (int i = 5; i > 0; i--)
+                    var task = Task.Run(async () =>
                     {
-                        logger.Write($"Killing app in {i} seconds...");
-                        await Task.Delay(1000);
-                    }
-                    logger.Write("Killing app now");
+                        for (int i = 5; i > 0; i--)
+                        {
+                            await LogAndRespond(currentChatId, $"Killing app in {i} seconds...");
+                            await Task.Delay(1000);
+                        }
+                        await LogAndRespond(currentChatId, "Killing app now");
 
-                    Environment.Exit(0);
-                });
+                        Environment.Exit(0);
+                    });
+                }
+                else if (txt.StartsWith("/broadcast", StringComparison.OrdinalIgnoreCase))
+                {
+                    var cmd = "/broadcast ";
+                    if (txt.Length > cmd.Length)
+                    {
+                        var remainder = txt.Substring(cmd.Length);
+                        foreach(var chatstate in _chatStates)
+                        {
+                            await _bot.SendTextMessageAsync(chatstate.Key, remainder);
+                        }
+                    }
+                }
             }
             else
             {
@@ -168,6 +187,12 @@ namespace DeveHangmanBot.TelegramBot
         {
             await _bot.AnswerCallbackQueryAsync(callbackQueryEventArgs.CallbackQuery.Id,
                 $"Received {callbackQueryEventArgs.CallbackQuery.Data}");
+        }
+
+        public async Task LogAndRespond(long chatId, string msg)
+        {
+            _logger.Write(msg);
+            await _bot.SendTextMessageAsync(chatId, msg);
         }
     }
 }

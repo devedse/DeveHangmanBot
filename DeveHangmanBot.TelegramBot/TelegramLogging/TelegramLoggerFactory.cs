@@ -7,12 +7,12 @@ namespace DeveHangmanBot.TelegramBot.TelegramLogging
 {
     public static class TelegramLoggerFactory
     {
-        public static ILogger CreateLogger(TelegramBotClient bot, long chatId, params ILogger[] extraLoggers)
+        public static ILogger CreateLogger(params ILogger[] extraLoggers)
         {
             var consoleLogger = new ConsoleLogger(LogLevel.Verbose);
-            var telegramLogger = new TelegramLogger(LogLevel.Information, bot, chatId);
+            //var telegramLogger = new TelegramLogger(LogLevel.Information, bot, chatId);
 
-            var loggerList = new List<ILogger>() { consoleLogger, telegramLogger };
+            var loggerList = new List<ILogger>() { consoleLogger };
             loggerList.AddRange(extraLoggers);
             var multiLogger = new MultiLoggerAppender(loggerList);
 

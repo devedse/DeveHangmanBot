@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DeveCoolLib.Logging;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,15 +9,17 @@ namespace DeveHangmanBot
 {
     public class HangmanGameState
     {
+        private readonly ILogger _logger;
         private readonly ChatState _chatState;
 
         public string Word { get; }
 
         public List<char> GuessedLetters { get; }
 
-        public HangmanGameState(ChatState chatState, string word)
+        public HangmanGameState(ILogger logger, ChatState chatState, string word)
         {
-            this._chatState = chatState;
+            _logger = logger;
+            _chatState = chatState;
             Word = word;
             GuessedLetters = new List<char>();
         }

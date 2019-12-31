@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeveCoolLib.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,10 +16,12 @@ namespace DeveHangmanBot
         public long ChatId { get; }
 
         public Dictionary<long, int> Points = new Dictionary<long, int>();
+        private readonly ILogger _logger;
         private readonly GlobalBotState _globalBotState;
 
-        public ChatState(GlobalBotState globalBotState, long chatId)
+        public ChatState(ILogger logger, GlobalBotState globalBotState, long chatId)
         {
+            _logger = logger;
             _globalBotState = globalBotState;
             ChatId = chatId;
         }
@@ -68,7 +71,7 @@ namespace DeveHangmanBot
                         var random = new Random();
                         var chosenWord = words[random.Next(words.Count)];
 
-                        CurrentGame = new HangmanGameState(this, chosenWord);
+                        CurrentGame = new HangmanGameState(_logger, this, chosenWord);
                         await CurrentGame.PrintHang(bot);
                     }
                 }
