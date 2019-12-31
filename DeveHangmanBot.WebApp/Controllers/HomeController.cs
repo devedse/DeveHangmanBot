@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using DeveHangmanBot.WebApp.Logging;
+using DeveHangmanBot.WebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using DeveHangmanBot.WebApp.Models;
+using System.Diagnostics;
 
 namespace DeveHangmanBot.WebApp.Controllers
 {
@@ -21,6 +18,13 @@ namespace DeveHangmanBot.WebApp.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Logging()
+        {
+            ViewData["Message"] = "Logging page.";
+
+            return View(DirtyMemoryLogger.LoggingLines);
         }
 
         public IActionResult Privacy()
