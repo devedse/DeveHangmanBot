@@ -15,12 +15,11 @@ matrix:
 
 script:
   - python Scripts/set-version.py
-  - docker build -t devedse/devehangmanbot:$TRAVIS_BUILD_NUMBER -f DeveHangmanBot.WebApp/Dockerfile .;
+  - docker build -t "devedse/devehangmanbot:latest" -f DeveHangmanBot.WebApp/Dockerfile .;
   - if [[ $TRAVIS_BRANCH == 'master' ]]; then
       docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
-      docker image tag devedse/devehangmanbot:$TRAVIS_BUILD_NUMBER devedse/devehangmanbot:latest
-      docker push devedse/devehangmanbot:$TRAVIS_BUILD_NUMBER;
-      docker push devedse/devehangmanbot:latest;
+      docker image tag devedse/devehangmanbot:latest "devedse/devehangmanbot:$TRAVIS_BUILD_NUMBER"
+      docker push devedse/devehangmanbot;
     fi
 
 notifications:
