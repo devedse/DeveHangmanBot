@@ -1,5 +1,5 @@
 # DeveHangmanBot
-The goal of this project is to be able to save the state of a code line and skip it if it already knows the result.
+A very simple and easy to use Hangman bot for Telegram
 
 ## Build status
 
