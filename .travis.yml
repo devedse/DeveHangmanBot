@@ -11,7 +11,7 @@ matrix:
   include:
     - mono: none
       os: linux
-      dist: bionic # Ubuntu 14.04
+      dist: bionic # Ubuntu 18.04
 
 script:
   - python Scripts/set-version.py
