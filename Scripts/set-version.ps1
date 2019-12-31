@@ -16,8 +16,13 @@ $ScriptDir = Split-Path -Path $PSScriptFilePath -Parent
 $SolutionRoot = Split-Path -Path $ScriptDir -Parent
 
 $csprojPath = Join-Path -Path $SolutionRoot -ChildPath "DeveHangmanBot\DeveHangmanBot.csproj"
+$csprojPathTelegramBot = Join-Path -Path $SolutionRoot -ChildPath "DeveHangmanBot.TelegramBot\DeveHangmanBot.TelegramBot.csproj"
+$csprojPathWebApp = Join-Path -Path $SolutionRoot -ChildPath "DeveHangmanBot.WebApp\DeveHangmanBot.WebApp.csproj"
+
 $re = [regex]"(?<=<Version>).*(?=<\/Version>)"
 
 Write-Host "Applying version $totalVersion to $csprojPath using regex $re"
  
 $re.Replace([string]::Join("`n", (Get-Content -Path $csprojPath)), "$totalVersion", 1) | Set-Content -Path $csprojPath -Encoding UTF8
+$re.Replace([string]::Join("`n", (Get-Content -Path $csprojPathTelegramBot)), "$totalVersion", 1) | Set-Content -Path $csprojPathTelegramBot -Encoding UTF8
+$re.Replace([string]::Join("`n", (Get-Content -Path $csprojPathWebApp)), "$totalVersion", 1) | Set-Content -Path $csprojPathWebApp -Encoding UTF8
