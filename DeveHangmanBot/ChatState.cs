@@ -3,9 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
+using DeveCoolLib.Threading;
 
 namespace DeveHangmanBot
 {
@@ -19,6 +21,8 @@ namespace DeveHangmanBot
         private readonly ILogger _logger;
         private readonly GlobalBotState _globalBotState;
 
+        private SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1);
+
         public ChatState(ILogger logger, GlobalBotState globalBotState, long chatId)
         {
             _logger = logger;
@@ -28,79 +32,83 @@ namespace DeveHangmanBot
 
         public async Task HandleMessage(TelegramBotClient bot, Message message)
         {
-            var msg = message.Text;
-
-            if (!BotActive)
+            //Ensure only one message can be handled at a time
+            using (var disposableSemaphore = await _semaphoreSlim.DisposableWaitAsync())
             {
-                switch (msg)
-                {
-                    case "/start":
-                        BotActive = true;
-                        await bot.SendTextMessageAsync(ChatId, "Bot is now active");
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                if (msg.Equals("/stop"))
-                {
-                    BotActive = false;
-                    CurrentGame = null;
-                    await bot.SendTextMessageAsync(ChatId, "Bot is now inactive");
-                }
-                else if (msg.Equals("/stopgame"))
-                {
-                    await bot.SendTextMessageAsync(ChatId, "Stopping game");
-                    CurrentGame = null;
-                }
-                else if (msg.StartsWith("/play"))
-                {
-                    var chosenWordLists = msg.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Skip(1);
+                var msg = message.Text;
 
-                    var wordLists = WordListInitiator.GetThese(chosenWordLists);
-                    var words = wordLists.SelectMany(t => t.Words).ToList();
-
-                    if (words.Count == 0)
+                if (!BotActive)
+                {
+                    switch (msg)
                     {
-                        await DisplayHelp(bot);
-                    }
-                    else
-                    {
-                        var random = new Random();
-                        var chosenWord = words[random.Next(words.Count)];
-
-                        CurrentGame = new HangmanGameState(_logger, this, chosenWord);
-                        await CurrentGame.PrintHang(bot);
+                        case "/start":
+                            BotActive = true;
+                            await bot.SendTextMessageAsync(ChatId, "Bot is now active");
+                            break;
+                        default:
+                            break;
                     }
                 }
-                else if (msg.Equals("/words"))
+                else
                 {
-                    await DisplayWordLists(bot);
-                }
-                else if (msg.Equals("/points"))
-                {
-                    var sb = new StringBuilder();
-                    sb.AppendLine("Points:");
-                    var pointThings = Points.OrderByDescending(t => t.Value);
-                    foreach (var point in pointThings)
+                    if (msg.Equals("/stop"))
                     {
-                        sb.AppendLine($"{GetName(point.Key)}: {point.Value}");
-                    }
-
-                    await bot.SendTextMessageAsync(ChatId, sb.ToString());
-                }
-                else if (CurrentGame != null)
-                {
-                    var correct = await CurrentGame.HandleGuess(bot, msg);
-
-                    if (correct)
-                    {
-                        await bot.SendTextMessageAsync(ChatId, $"You fucking did it {GetName(message.From.Id)}, 10 points to gryffindor");
-                        AddPoints(message.From.Id, 10);
-
+                        BotActive = false;
                         CurrentGame = null;
+                        await bot.SendTextMessageAsync(ChatId, "Bot is now inactive");
+                    }
+                    else if (msg.Equals("/stopgame"))
+                    {
+                        await bot.SendTextMessageAsync(ChatId, "Stopping game");
+                        CurrentGame = null;
+                    }
+                    else if (msg.StartsWith("/play"))
+                    {
+                        var chosenWordLists = msg.Split(new char[] { ',', ' ' }, StringSplitOptions.RemoveEmptyEntries).Skip(1);
+
+                        var wordLists = WordListInitiator.GetThese(chosenWordLists);
+                        var words = wordLists.SelectMany(t => t.Words).ToList();
+
+                        if (words.Count == 0)
+                        {
+                            await DisplayHelp(bot);
+                        }
+                        else
+                        {
+                            var random = new Random();
+                            var chosenWord = words[random.Next(words.Count)];
+
+                            CurrentGame = new HangmanGameState(_logger, this, chosenWord);
+                            await CurrentGame.PrintHang(bot);
+                        }
+                    }
+                    else if (msg.Equals("/words"))
+                    {
+                        await DisplayWordLists(bot);
+                    }
+                    else if (msg.Equals("/points"))
+                    {
+                        var sb = new StringBuilder();
+                        sb.AppendLine("Points:");
+                        var pointThings = Points.OrderByDescending(t => t.Value);
+                        foreach (var point in pointThings)
+                        {
+                            sb.AppendLine($"{GetName(point.Key)}: {point.Value}");
+                        }
+
+                        await bot.SendTextMessageAsync(ChatId, sb.ToString());
+                    }
+                    else if (CurrentGame != null)
+                    {
+                        var correct = await CurrentGame.HandleGuess(bot, msg);
+
+                        if (correct)
+                        {
+                            await bot.SendTextMessageAsync(ChatId, $"You fucking did it {GetName(message.From.Id)}, 10 points to gryffindor");
+                            AddPoints(message.From.Id, 10);
+
+                            CurrentGame = null;
+                        }
                     }
                 }
             }
@@ -118,7 +126,7 @@ namespace DeveHangmanBot
             }
         }
 
-        public async Task DisplayHelp(TelegramBotClient bot)
+        private async Task DisplayHelp(TelegramBotClient bot)
         {
             var sb = new StringBuilder();
             sb.AppendLine("Type a letter to guess");
@@ -130,7 +138,7 @@ namespace DeveHangmanBot
             await bot.SendTextMessageAsync(ChatId, sb.ToString());
         }
 
-        public async Task DisplayWordLists(TelegramBotClient bot)
+        private async Task DisplayWordLists(TelegramBotClient bot)
         {
             var sb = new StringBuilder();
             sb.AppendLine("Available word lists for /play (e.g. /play 1 2)");
