@@ -98,6 +98,14 @@ namespace DeveHangmanBot
 
                         await bot.SendTextMessageAsync(ChatId, sb.ToString());
                     }
+                    else if (msg.Equals("/hint") && CurrentGame != null)
+                    {
+                        var isNoob = await CurrentGame.GiveHint(bot, msg);
+                        if (isNoob)
+                        {
+                            AddPoints(message.From.Id, -10);
+                        }
+                    }
                     else if (CurrentGame != null)
                     {
                         var correct = await CurrentGame.HandleGuess(bot, msg);

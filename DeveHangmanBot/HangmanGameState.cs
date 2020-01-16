@@ -1,4 +1,5 @@
 ﻿using DeveCoolLib.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -70,6 +71,23 @@ namespace DeveHangmanBot
             await bot.SendTextMessageAsync(_chatState.ChatId, sb.ToString());
 
             return guessesIncorrect == 0;
+        }
+
+        public async Task<bool> GiveHint(TelegramBotClient bot, string msg)
+        {
+            var allLetters = Word.Distinct();
+            var allRemainingLetters = allLetters.Except(GuessedLetters).Distinct().ToList();
+            if (allRemainingLetters.Count > 1)
+            {
+                var r = new Random();
+                await HandleGuess(bot, allRemainingLetters[r.Next(allRemainingLetters.Count)].ToString());
+                return true;
+            }
+            else
+            {
+                await bot.SendTextMessageAsync(_chatState.ChatId, "Boy, foh real?, there's only one letter remaining, you damn shitnoob! -10 points");
+                return false;
+            }
         }
     }
 }
