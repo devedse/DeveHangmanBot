@@ -81,12 +81,12 @@ namespace DeveHangmanBot
             {
                 var r = new Random();
                 await HandleGuess(bot, allRemainingLetters[r.Next(allRemainingLetters.Count)].ToString());
-                return true;
+                return false;
             }
             else
             {
                 await bot.SendTextMessageAsync(_chatState.ChatId, "Boy, foh real?, there's only one letter remaining, you damn shitnoob! -1000 points just for asking.");
-                return false;
+                return true;
             }
         }
     }
