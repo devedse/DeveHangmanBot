@@ -2,7 +2,7 @@
 using DeveHangmanBot.Config;
 using DeveHangmanBot.TelegramBot.TelegramLogging;
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -19,7 +19,7 @@ namespace DeveHangmanBot.TelegramBot
         private readonly BotConfig _botConfig;
         private readonly ILogger[] _extraLoggers;
 
-        private readonly Dictionary<long, ChatState> _chatStates = new Dictionary<long, ChatState>();
+        private readonly ConcurrentDictionary<long, ChatState> _chatStates = new ConcurrentDictionary<long, ChatState>();
 
         private readonly GlobalBotState _globalBotState = new GlobalBotState();
 
@@ -130,16 +130,13 @@ namespace DeveHangmanBot.TelegramBot
 
             var currentChatId = message.Chat.Id;
 
-            _chatStates.TryGetValue(currentChatId, out ChatState curChat);
-            if (curChat == null)
+            var curChat = _chatStates.GetOrAdd(currentChatId, (i) =>
             {
-                curChat = new ChatState(_logger, _globalBotState, currentChatId);
-                _chatStates.Add(currentChatId, curChat);
-
                 _logger.Write($"Added new chat group: {currentChatId}");
-            }
+                return new ChatState(_logger, _globalBotState, currentChatId);
+            });
 
-            _globalBotState.AllUsers[message.From.Id] = message.From;
+            _globalBotState.AllUsers.TryAdd(message.From.Id, message.From);
 
 
 
