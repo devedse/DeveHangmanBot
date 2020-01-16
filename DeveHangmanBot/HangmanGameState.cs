@@ -85,7 +85,7 @@ namespace DeveHangmanBot
             }
             else
             {
-                await bot.SendTextMessageAsync(_chatState.ChatId, "Boy, foh real?, there's only one letter remaining, you damn shitnoob! -10 points");
+                await bot.SendTextMessageAsync(_chatState.ChatId, "Boy, foh real?, there's only one letter remaining, you damn shitnoob! -1000 points just for asking.");
                 return false;
             }
         }

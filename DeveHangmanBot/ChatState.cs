@@ -103,7 +103,7 @@ namespace DeveHangmanBot
                         var isNoob = await CurrentGame.GiveHint(bot, msg);
                         if (isNoob)
                         {
-                            AddPoints(message.From.Id, -10);
+                            AddPoints(message.From.Id, -1000);
                         }
                     }
                     else if (CurrentGame != null)
