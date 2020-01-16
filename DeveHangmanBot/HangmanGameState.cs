@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Telegram.Bot;
 
@@ -12,16 +13,21 @@ namespace DeveHangmanBot
     {
         private readonly ILogger _logger;
         private readonly ChatState _chatState;
+        private readonly List<string> _potentialWords;
 
         public string Word { get; }
 
         public List<char> GuessedLetters { get; }
 
-        public HangmanGameState(ILogger logger, ChatState chatState, string word)
+        public HangmanGameState(ILogger logger, ChatState chatState, List<string> potentialWords)
         {
             _logger = logger;
             _chatState = chatState;
-            Word = word;
+            _potentialWords = potentialWords;
+
+            var random = new Random();
+            Word = potentialWords[random.Next(potentialWords.Count)];
+
             GuessedLetters = new List<char>();
         }
 
@@ -51,6 +57,18 @@ namespace DeveHangmanBot
             var sb = new StringBuilder();
             sb.AppendLine("Word:");
 
+            var guessProgress = GetCurrentGuessedProgress();
+            sb.Append(guessProgress.wordToWrite);
+
+            await bot.SendTextMessageAsync(_chatState.ChatId, sb.ToString());
+
+            return guessProgress.guessesIncorrect == 0;
+        }
+
+        private (string wordToWrite, int guessesIncorrect) GetCurrentGuessedProgress(string notFoundLetter = "_", string spaceBetween = " ")
+        {
+            var sb = new StringBuilder();
+
             int guessesIncorrect = 0;
 
             for (int i = 0; i < Word.Length; i++)
@@ -63,14 +81,12 @@ namespace DeveHangmanBot
                 else
                 {
                     guessesIncorrect++;
-                    sb.Append("_");
+                    sb.Append(notFoundLetter);
                 }
-                sb.Append(" ");
+                sb.Append(spaceBetween);
             }
 
-            await bot.SendTextMessageAsync(_chatState.ChatId, sb.ToString());
-
-            return guessesIncorrect == 0;
+            return (sb.ToString(), guessesIncorrect);
         }
 
         public async Task<bool> GiveHint(TelegramBotClient bot, string msg)
@@ -88,6 +104,24 @@ namespace DeveHangmanBot
                 await bot.SendTextMessageAsync(_chatState.ChatId, "Boy, foh real?, there's only one letter remaining, you damn shitnoob! -1000 points just for asking.");
                 return true;
             }
+        }
+
+        public async Task Cheat(TelegramBotClient bot, string msg)
+        {
+            var regexPart = GetCurrentGuessedProgress(".", "");
+            var wordProgress = $"^{regexPart}$";
+            var regex = new Regex(wordProgress, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
+            var sb = new StringBuilder();
+            sb.AppendLine("If you wouldn't be so shit, you'd know that these would be possible:");
+            var possibilities = _potentialWords.Distinct().Where(t => regex.IsMatch(t)).ToList();
+
+            foreach (var possibility in possibilities.Distinct())
+            {
+                sb.AppendLine(string.Join(" ", possibility));
+            }
+
+            await bot.SendTextMessageAsync(_chatState.ChatId, sb.ToString());
         }
     }
 }

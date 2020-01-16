@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using DeveCoolLib.Threading;
+using DeveHangmanBot.Config;
 
 namespace DeveHangmanBot
 {
@@ -75,8 +76,6 @@ namespace DeveHangmanBot
                         }
                         else
                         {
-                            var random = new Random();
-                            var chosenWord = words[random.Next(words.Count)];
 
                             CurrentGame = new HangmanGameState(_logger, this, chosenWord);
                             await CurrentGame.PrintHang(bot);
@@ -105,6 +104,10 @@ namespace DeveHangmanBot
                         {
                             AddPoints(message.From.Id, -1000);
                         }
+                    }
+                    else if (msg.Equals("/cheat") && CurrentGame != null && message.From.Id == BotConstants.DevedseId)
+                    {
+
                     }
                     else if (CurrentGame != null)
                     {

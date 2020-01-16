@@ -145,7 +145,7 @@ namespace DeveHangmanBot.TelegramBot
             {
                 await LogAndRespond(currentChatId, $"Hello {message.From.FirstName}{Environment.NewLine}Some usefull data:{Environment.NewLine}BotId: {_botConfig.TelegramBotToken.Split(':').FirstOrDefault()}{Environment.NewLine}ChatId: {message.Chat.Id}{Environment.NewLine}UserId: {message.From.Id}{Environment.NewLine}Version: {Assembly.GetEntryAssembly().GetName().Version}");
             }
-            else if (message.From.Id == 239844924L && txt.Equals("/update", StringComparison.OrdinalIgnoreCase))
+            else if (message.From.Id == BotConstants.DevedseId && txt.Equals("/update", StringComparison.OrdinalIgnoreCase))
             {
                 //Admin commands only allowed by Devedse
                 var task = Task.Run(async () =>
