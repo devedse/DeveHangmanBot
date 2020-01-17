@@ -1,4 +1,6 @@
 ﻿using DeveCoolLib.Logging;
+using DeveCoolLib.Threading;
+using DeveHangmanBot.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,8 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
-using DeveCoolLib.Threading;
-using DeveHangmanBot.Config;
 
 namespace DeveHangmanBot
 {
@@ -76,7 +76,6 @@ namespace DeveHangmanBot
                         }
                         else
                         {
-
                             CurrentGame = new HangmanGameState(_logger, this, words);
                             await CurrentGame.PrintHang(bot);
                         }
