@@ -35,7 +35,7 @@ namespace DeveHangmanBot
             _globalBotState = globalBotState;
             ChatId = chatId;
 
-            _imageObtainer = new ImageObtainer(botconfig);
+            _imageObtainer = new ImageObtainer(logger, botconfig);
         }
 
         public async Task HandleMessage(TelegramBotClient bot, Message message)

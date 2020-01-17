@@ -5,16 +5,19 @@ using System.Net.Http;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using DeveCoolLib.Logging;
 
 namespace DeveHangmanBot.ImageStuff
 {
     public class ImageObtainer
     {
+        private readonly ILogger _logger;
         private readonly BotConfig _botConfig;
 
-        public ImageObtainer(BotConfig botConfig)
+        public ImageObtainer(ILogger logger, BotConfig botConfig)
         {
-            this._botConfig = botConfig;
+            _logger = logger;
+            _botConfig = botConfig;
         }
 
         public async Task<byte[]> GetGoogleImageBytes(string word)
@@ -43,6 +46,10 @@ namespace DeveHangmanBot.ImageStuff
             }
             catch (Exception ex)
             {
+                _logger.WriteError(ex.ToString());
+
+                _logger.WriteError($"Length of GoogleApiKey: {_botConfig.GoogleApiKey.Length}");
+                _logger.WriteError($"Length of GoogleCxToken: {_botConfig.GoogleCxToken.Length}");
             }
 
             return null;
@@ -67,6 +74,10 @@ namespace DeveHangmanBot.ImageStuff
             }
             catch (Exception ex)
             {
+                _logger.WriteError(ex.ToString());
+
+                _logger.WriteError($"Length of GoogleApiKey: {_botConfig.GoogleApiKey.Length}");
+                _logger.WriteError($"Length of GoogleCxToken: {_botConfig.GoogleCxToken.Length}");
             }
 
             return new List<string>();
@@ -97,6 +108,9 @@ namespace DeveHangmanBot.ImageStuff
             }
             catch (Exception ex)
             {
+                _logger.WriteError(ex.ToString());
+
+                _logger.WriteError($"Length of GiphyApiKey: {_botConfig.GiphyApiKey.Length}");
             }
 
             return null;
