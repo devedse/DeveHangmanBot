@@ -109,7 +109,7 @@ namespace DeveHangmanBot
         public async Task Cheat(TelegramBotClient bot)
         {
             var regexPart = GetCurrentGuessedProgress(".", "");
-            var wordProgress = $"^{regexPart}$";
+            var wordProgress = $"^{regexPart.wordToWrite}$";
             var regex = new Regex(wordProgress, RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
             var sb = new StringBuilder();
@@ -118,7 +118,7 @@ namespace DeveHangmanBot
 
             foreach (var possibility in possibilities.Distinct())
             {
-                sb.AppendLine(string.Join(" ", possibility));
+                sb.AppendLine(possibility);
             }
 
             await bot.SendTextMessageAsync(_chatState.ChatId, sb.ToString());
