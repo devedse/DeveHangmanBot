@@ -77,7 +77,7 @@ namespace DeveHangmanBot
                         else
                         {
 
-                            CurrentGame = new HangmanGameState(_logger, this, chosenWord);
+                            CurrentGame = new HangmanGameState(_logger, this, words);
                             await CurrentGame.PrintHang(bot);
                         }
                     }
