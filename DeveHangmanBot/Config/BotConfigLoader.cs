@@ -25,7 +25,10 @@ namespace DeveHangmanBot.Config
         {
             var config = new BotConfig()
             {
-                TelegramBotToken = configuration.GetValue<string>("TelegramBotToken")
+                TelegramBotToken = configuration.GetValue<string>("TelegramBotToken"),
+                GoogleApiKey = configuration.GetValue<string>("GoogleApiKey"),
+                GoogleCxToken = configuration.GetValue<string>("GoogleCxToken"),
+                GiphyApiKey = configuration.GetValue<string>("GiphyApiKey"),
             };
 
             return config;

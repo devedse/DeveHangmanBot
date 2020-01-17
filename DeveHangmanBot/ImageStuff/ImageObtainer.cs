@@ -1,11 +1,11 @@
-﻿using DeveHangmanBot.Config;
+﻿using DeveCoolLib.Logging;
+using DeveHangmanBot.Config;
 using Newtonsoft.Json;
 using System;
-using System.Net.Http;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using DeveCoolLib.Logging;
+using System.Linq;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace DeveHangmanBot.ImageStuff
 {
@@ -48,8 +48,8 @@ namespace DeveHangmanBot.ImageStuff
             {
                 _logger.WriteError(ex.ToString());
 
-                _logger.WriteError($"Length of GoogleApiKey: {_botConfig.GoogleApiKey.Length}");
-                _logger.WriteError($"Length of GoogleCxToken: {_botConfig.GoogleCxToken.Length}");
+                //_logger.WriteError($"Length of GoogleApiKey: {_botConfig.GoogleApiKey.Length}");
+                //_logger.WriteError($"Length of GoogleCxToken: {_botConfig.GoogleCxToken.Length}");
             }
 
             return null;
@@ -76,8 +76,8 @@ namespace DeveHangmanBot.ImageStuff
             {
                 _logger.WriteError(ex.ToString());
 
-                _logger.WriteError($"Length of GoogleApiKey: {_botConfig.GoogleApiKey.Length}");
-                _logger.WriteError($"Length of GoogleCxToken: {_botConfig.GoogleCxToken.Length}");
+                //_logger.WriteError($"Length of GoogleApiKey: {_botConfig.GoogleApiKey.Length}");
+                //_logger.WriteError($"Length of GoogleCxToken: {_botConfig.GoogleCxToken.Length}");
             }
 
             return new List<string>();
@@ -110,7 +110,7 @@ namespace DeveHangmanBot.ImageStuff
             {
                 _logger.WriteError(ex.ToString());
 
-                _logger.WriteError($"Length of GiphyApiKey: {_botConfig.GiphyApiKey.Length}");
+                //_logger.WriteError($"Length of GiphyApiKey: {_botConfig.GiphyApiKey.Length}");
             }
 
             return null;
