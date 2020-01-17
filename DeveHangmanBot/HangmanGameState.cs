@@ -106,7 +106,7 @@ namespace DeveHangmanBot
             }
         }
 
-        public async Task Cheat(TelegramBotClient bot, string msg)
+        public async Task Cheat(TelegramBotClient bot)
         {
             var regexPart = GetCurrentGuessedProgress(".", "");
             var wordProgress = $"^{regexPart}$";

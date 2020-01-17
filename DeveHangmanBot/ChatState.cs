@@ -106,7 +106,7 @@ namespace DeveHangmanBot
                     }
                     else if (msg.Equals("/cheat") && CurrentGame != null && message.From.Id == BotConstants.DevedseId)
                     {
-
+                        await CurrentGame.Cheat(bot);
                     }
                     else if (CurrentGame != null)
                     {
