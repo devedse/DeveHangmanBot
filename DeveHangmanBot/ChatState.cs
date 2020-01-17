@@ -1,6 +1,7 @@
 ﻿using DeveCoolLib.Logging;
 using DeveCoolLib.Threading;
 using DeveHangmanBot.Config;
+using DeveHangmanBot.ImageStuff;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,16 +20,22 @@ namespace DeveHangmanBot
         public long ChatId { get; }
 
         public Dictionary<long, int> Points = new Dictionary<long, int>();
+        private readonly BotConfig _botconfig;
         private readonly ILogger _logger;
         private readonly GlobalBotState _globalBotState;
 
-        private SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1);
+        private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1);
 
-        public ChatState(ILogger logger, GlobalBotState globalBotState, long chatId)
+        private readonly ImageObtainer _imageObtainer;
+
+        public ChatState(BotConfig botconfig, ILogger logger, GlobalBotState globalBotState, long chatId)
         {
+            _botconfig = botconfig;
             _logger = logger;
             _globalBotState = globalBotState;
             ChatId = chatId;
+
+            _imageObtainer = new ImageObtainer(botconfig);
         }
 
         public async Task HandleMessage(TelegramBotClient bot, Message message)
@@ -76,7 +83,7 @@ namespace DeveHangmanBot
                         }
                         else
                         {
-                            CurrentGame = new HangmanGameState(_logger, this, words);
+                            CurrentGame = new HangmanGameState(_imageObtainer, _logger, this, words);
                             await CurrentGame.PrintHang(bot);
                         }
                     }

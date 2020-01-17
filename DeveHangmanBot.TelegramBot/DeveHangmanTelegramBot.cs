@@ -133,7 +133,7 @@ namespace DeveHangmanBot.TelegramBot
             var curChat = _chatStates.GetOrAdd(currentChatId, (i) =>
             {
                 _logger.Write($"Added new chat group: {currentChatId}");
-                return new ChatState(_logger, _globalBotState, currentChatId);
+                return new ChatState(_botConfig, _logger, _globalBotState, currentChatId);
             });
 
             _globalBotState.AllUsers.TryAdd(message.From.Id, message.From);

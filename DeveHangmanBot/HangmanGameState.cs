@@ -1,16 +1,20 @@
 ﻿using DeveCoolLib.Logging;
+using DeveHangmanBot.ImageStuff;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Telegram.Bot;
+using Telegram.Bot.Types.InputFiles;
 
 namespace DeveHangmanBot
 {
     public class HangmanGameState
     {
+        private readonly ImageObtainer _imageObtainer;
         private readonly ILogger _logger;
         private readonly ChatState _chatState;
         private readonly List<string> _potentialWords;
@@ -19,8 +23,9 @@ namespace DeveHangmanBot
 
         public List<char> GuessedLetters { get; }
 
-        public HangmanGameState(ILogger logger, ChatState chatState, List<string> potentialWords)
+        public HangmanGameState(ImageObtainer imageObtainer, ILogger logger, ChatState chatState, List<string> potentialWords)
         {
+            _imageObtainer = imageObtainer;
             _logger = logger;
             _chatState = chatState;
             _potentialWords = potentialWords;
@@ -48,6 +53,30 @@ namespace DeveHangmanBot
                 result = await PrintHang(bot);
             }
 
+            if (result)
+            {
+                var obtainedGoogleImages = await _imageObtainer.GetGoogleImagesLinks(Word);
+                foreach (var potentialImage in obtainedGoogleImages)
+                {
+                    try
+                    {
+                        var fileToSend = new InputOnlineFile(potentialImage);
+                        await bot.SendPhotoAsync(_chatState.ChatId, fileToSend);
+                        break;
+                    }
+                    catch (Exception ex)
+                    {
+                        //This image failed, apparently 404 or so
+                    }
+                }
+
+                var obtainedGiphyImage = await _imageObtainer.GetGiphyImageLink(Word);
+                if (obtainedGiphyImage != null)
+                {
+                    var fileToSend = new InputOnlineFile(obtainedGiphyImage);
+                    await bot.SendAnimationAsync(_chatState.ChatId, fileToSend);
+                }
+            }
 
             return result;
         }
